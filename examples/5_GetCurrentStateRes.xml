@@ -1,0 +1,20 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:ns="urn://iac-mchs-ru/services/spi/types/1.1">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <ns:GetCurrentStateRes xmlns:ns="urn://iac-mchs-ru/services/spi/types/1.1">
+            <ObjState id="string">
+                <Sensor id="3" location="зал">
+                    <Code id="1" ts="1614626150000"/>
+                </Sensor>
+<!--
+*********************************************
+-->
+                <Sensor id="4" location="столовая">
+                    <Code id="1" ts="1614626090000"/>
+                    <Code id="4" ts="1614626150000"/>
+                </Sensor>
+            </ObjState>
+        </ns:GetCurrentStateRes>
+    </soapenv:Body>
+</soapenv:Envelope>

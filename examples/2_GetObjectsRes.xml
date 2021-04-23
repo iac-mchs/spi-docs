@@ -1,0 +1,31 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:ns="urn://iac-mchs-ru/services/spi/types/1.1">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <ns:GetObjectsRes>
+            <ObjDesc id="128" name="Школа №66 " type="Школа" address="г. Москва, ул. Тестовая 13" lat="55.797812"
+                     lon="37.428163">
+                <Owner fio="Иванов Иван Иванович" phone="+7 777 777 77 77" addInfo="Директор"/>
+                <Contacts fio="Петров Петр" phone="+7 999 999 9999" addInfo="охранник"/>
+                <Contacts fio="Александров Александр" phone="+7 999 999 9999" addInfo="охранник"/>
+                <Maintainer name="ООО ЗАЩИТНИК" phone="+7 123 456 7890" address="г. Москва"/>
+            </ObjDesc>
+            <ObjDesc id="129" name="ТЦ Привет " type="ТЦ" address="г. Москва, ул. Тестовая 14"
+                     desc="2 здания, 3х и 4х этажные, расположены на одной территории"
+                     addInfo="имеется два независимых подъезда пожарных машин. В 4х этажном здании функционирует пожарный лифт.">
+                <Owner fio="Тестов Тест Тестович" phone="+7 777 777 77 77"/>
+                <Contacts fio="Охрана" phone="+7 999 999 9999"/>
+                <Maintainer name="ООО ЗАЩИТНИК" phone="+7 123 456 7890" address="г. Москва"/>
+            </ObjDesc>
+            <File name="plan_zdaniya.jpg">
+                <Content>
+                    data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEBLAEsAAD/4Q4pRXhpZgAATU0AKgAAAAgABwESAAMAAAABAAEAAAEaAAUxV2KuxV2KuxV2KuxV2KuxV2KuxV2KuxV//Z
+                </Content>
+            </File>
+            <File name="plan_2.jpg">
+                <Content>data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQEBAQIBAQAKKKKAKKKKAKKKKA//2Q==
+                </Content>
+            </File>
+        </ns:GetObjectsRes>
+    </soapenv:Body>
+</soapenv:Envelope>

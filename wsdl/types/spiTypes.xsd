@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="urn://iac-mchs-ru/services/spi/types/1.1"
+    xmlns:tns="urn://iac-mchs-ru/services/spi/types/1.1">
+    <xs:complexType name="GetObjectsReq">
+        <xs:annotation>
+            <xs:documentation>Запрос списка объектов доступных пользователю.</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="tns:RequestType"> </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="GetObjectsRes">
+        <xs:annotation>
+            <xs:documentation>Список объектов доступных для пользователя и их полное описание.</xs:documentation>
+        </xs:annotation>
+        <xs:choice>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="Obj">
+                <xs:annotation>
+                    <xs:documentation>Объект, доступный для пользователя.
+Возвращается при запросе всех объктов.</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:attribute name="id" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>Id объекта</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="tsLastUpdate" type="xs:long" use="required">
+                        <xs:annotation>
+                            <xs:documentation>Timestamp последнего обновления информации по объекту</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="ObjDesc" maxOccurs="unbounded" type="tns:ObjectDescriptionType">
+                <xs:annotation>
+                    <xs:documentation>Описание объекта.
+Возвращается при запросе информации по конкретному объекту.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="GetCurrentStateReq">
+        <xs:annotation>
+            <xs:documentation>Запрос текущего состояния объектов подконтрольных пользователю.</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="tns:RequestType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="GetCurrentStateRes">
+        <xs:annotation>
+            <xs:documentation>Список объектов доступных для пользователя и их состояний.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="ObjState" maxOccurs="unbounded" type="tns:ObjectStateType">
+                <xs:annotation>
+                    <xs:documentation>Текущее состояние объекта</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="SendAckReq">
+        <xs:annotation>
+            <xs:documentation>Отправляет сигнал о 'взятии на контроль' объекта.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="objId" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>Id источника</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="ts" type="xs:long">
+            <xs:annotation>
+                <xs:documentation>Время отправки запроса</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="SendAckRes">
+        <xs:annotation>
+            <xs:documentation>Возвращает текущее состояние объекта по которому был отправлен сигнал 'взятие на контроль'.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="ObjState" type="tns:ObjectStateType">
+                <xs:annotation>
+                    <xs:documentation>Текущее состояние объекта</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="GetAckHistoryReq">
+        <xs:annotation>
+            <xs:documentation>Запрос истории по сигналам 'взятие на контроль' по объектам.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="ts" type="xs:long">
+            <xs:annotation>
+                <xs:documentation>Показать данные с указанного timestamp.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="objId" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>Показать данные только для указанного объекта.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="GetAckHistoryRes">
+        <xs:annotation>
+            <xs:documentation>Возвращает историю по сигналам 'взятие на контроль' по объектам.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="Ack" maxOccurs="unbounded" minOccurs="0" type="tns:AckHistoryType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="RequestType">
+        <xs:annotation>
+            <xs:documentation>Тип 'запрос по объекту'.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="Obj">
+                <xs:annotation>
+                    <xs:documentation>Запрос информации по конкретному объекту. Не обязательно, только если требуется получтить информацию по конкретному объекту.</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:attribute name="id" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>Id запрашиваемого объекта</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="ts" type="xs:long">
+            <xs:annotation>
+                <xs:documentation>Показать данные с указанного timestamp.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="ObjectDescriptionType">
+        <xs:annotation>
+            <xs:documentation>Тип 'описание объекта'.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="Owner" type="tns:PersonInfo">
+                <xs:annotation>
+                    <xs:documentation>Контактные данные руководителя</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element maxOccurs="unbounded" name="Contacts" type="tns:PersonInfo">
+                <xs:annotation>
+                    <xs:documentation>Контактные данные</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Maintainer">
+                <xs:annotation>
+                    <xs:documentation>Обслуживающая организация</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:attribute name="name" type="xs:string" use="required"/>
+                    <xs:attribute name="phone" type="xs:string" use="required"/>
+                    <xs:attribute name="address" type="xs:string" use="optional"/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="File" type="tns:AttachmentType">
+                <xs:annotation>
+                    <xs:documentation>Приложенный файл.
+(пр: план объекта, поэтажный план)</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>Id объекта</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="name" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>Наименование объекта</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="type" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>Тип объекта (Больница, школа и т.д.)</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="address" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>Адрес объекта</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="lat" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>Широта</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="lon" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>Долгота</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="protectionSystemsInfo" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>сведения о действующих на объекте системах автоматической поотивопожарной защиты
+(система пожарной сигнализации СПС,
+система оповещения и управлнея эвакуацией людей при пожаре СОУЭ,
+система противодымной защиты СПДЗ,
+установка пожаротушения АУПТ) 
+и защищаемых зонах</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="desc" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>Краткая характеристика объекта.
+(пр: 2 здания, 3х и 4х этажные, расположены на одной территории)</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="addInfo" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>Дополнительные сведения.
+(Пр: имеется два независимых подъезда пожарных машин. В 4х этажном здании функционирует пожарный лифт.)</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="PersonInfo">
+        <xs:annotation>
+            <xs:documentation>Тип 'информация о человеке'.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="fio" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>Фамилия Имя Отчество</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="phone" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>Контактный телефон</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="addInfo" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>Дополнительная информация</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="AttachmentType">
+        <xs:annotation>
+            <xs:documentation>Тип 'вложенный файл'.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="Content" type="xs:base64Binary">
+                <xs:annotation>
+                    <xs:documentation>Контент в base64Binary</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>Имя файла</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="ObjectStateType">
+        <xs:annotation>
+            <xs:documentation>Тип 'состояние объекта'.</xs:documentation>
+        </xs:annotation>
+        <xs:choice>
+            <xs:element name="Status" type="tns:StatusType" maxOccurs="20">
+                <xs:annotation>
+                    <xs:documentation>Состояние объекта.
+Выводится если был запрос на все объекты.
+Выводится если был запрос на взятие объекта на контроль.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="Sensor" type="tns:SensorType">
+                <xs:annotation>
+                    <xs:documentation>Датчик и его состояние.
+Выводится если был запрос на конкретный объект.
+</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:choice>
+        <xs:attribute name="id" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>Id объекта</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="StatusType">
+        <xs:annotation>
+            <xs:documentation>Тип 'статус объекта'.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="Sensor">
+                <xs:annotation>
+                    <xs:documentation>Датчик, который находится в указанном состоянии.
+Выводится ТОЛЬКО для датчиков, которые посылают сигнал 'пожар'</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:attribute name="id" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>id сенсора</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="code" type="xs:int" use="required">
+            <xs:annotation>
+                <xs:documentation>Код состояния</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="ts" type="xs:long" use="required">
+            <xs:annotation>
+                <xs:documentation>Метка времени, указывающая когда объект последний раз находился в данном состоянии</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="initiator" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>Инициатор перевода в указанное состояние.
+Указывается для состояний: 'взято на контроль';</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="SensorType">
+        <xs:annotation>
+            <xs:documentation>тип 'датчик'.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="Code">
+                <xs:complexType>
+                    <xs:attribute name="id" type="xs:int" use="required">
+                        <xs:annotation>
+                            <xs:documentation>id статуса</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="ts" type="xs:long" use="required">
+                        <xs:annotation>
+                            <xs:documentation>timestamp</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:int" use="required">
+            <xs:annotation>
+                <xs:documentation>Id датчика</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="location" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>Расположение датчика
+</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="AckHistoryType">
+        <xs:annotation>
+            <xs:documentation>Тип 'Ack'.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="id" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>Id</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="ts" type="xs:long" use="required">
+            <xs:annotation>
+                <xs:documentation>Время когда объект был взят на контроль</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="objId" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>Id объекта</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="initiator" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>Инициатор перевода в указанное состояние.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+</xs:schema>

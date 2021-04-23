@@ -1,0 +1,14 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:ns="urn://iac-mchs-ru/services/spi/types/1.1">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <ns:GetObjectsRes>
+            <Obj id="121" tsLastUpdate="1583087859000"/>
+            <Obj id="124" tsLastUpdate="1583087859000"/>
+            <Obj id="126" tsLastUpdate="1583087859000"/>
+            <Obj id="127" tsLastUpdate="1583087859000"/>
+            <Obj id="128" tsLastUpdate="1614623859000"/>
+            <Obj id="129" tsLastUpdate="1614623859000"/>
+        </ns:GetObjectsRes>
+    </soapenv:Body>
+</soapenv:Envelope>

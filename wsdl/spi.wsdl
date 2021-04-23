@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="urn://iac-mchs-ru/services/spi/1.1"
+    xmlns:tns="urn://iac-mchs-ru/services/spi/1.1"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:spi="urn://iac-mchs-ru/services/spi/types/1.1">
+    
+    <wsdl:documentation>
+        Веб-сервис, разработанный МЧС России, 
+        через который должен производиться обмен данными между приборами пультовыми оконечными (ППО)
+        систем передачи извещений о пожаре (СПИ) и автоматизированным рабочи местом (АРМ) 
+        диспетчера пожарно-спасательного подразделения 
+        или оборудования приема и отображения информации верхнего уровня.
+    </wsdl:documentation>
+    
+    <wsdl:types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" >            
+            <xs:import namespace="urn://iac-mchs-ru/services/spi/types/1.1" schemaLocation="types/spiTypes.xsd"/>
+        </xs:schema>
+    </wsdl:types>
+    
+    <wsdl:message name="GetObjectsIn">
+        <wsdl:part name="GetObjectsReq" type="spi:GetObjectsReq"/>
+    </wsdl:message>
+    <wsdl:message name="GetObjectsOut">
+        <wsdl:part name="GetObjectsRes" type="spi:GetObjectsRes"/>
+    </wsdl:message>
+
+    <wsdl:message name="GetCurrentStateIn">
+        <wsdl:part name="GetCurrentStateReq" type="spi:GetCurrentStateReq" />
+    </wsdl:message>
+    <wsdl:message name="GetCurrentStateOut">
+        <wsdl:part name="GetCurrentStateRes" type="spi:GetCurrentStateRes"/>
+    </wsdl:message>
+
+    <wsdl:message name="SendAckIn">
+        <wsdl:part name="SendAckReq" type="spi:SendAckReq"/>
+    </wsdl:message>
+    <wsdl:message name="SendAckOut">
+        <wsdl:part name="SendAckRes" type="spi:SendAckRes"/>
+    </wsdl:message>
+    
+    <wsdl:message name="GetAckHistoryIn">
+        <wsdl:part name="GetAckHistoryReq" type="spi:GetAckHistoryReq"/>
+    </wsdl:message>
+    <wsdl:message name="GetAckHistoryOut">
+        <wsdl:part name="GetAckHistoryRes" type="spi:GetAckHistoryRes"/>
+    </wsdl:message>
+    
+    <wsdl:portType name="SpiPT">
+        <wsdl:documentation>
+            Точка доступа, позволяющая принимать запросы для получения информации по объектам защиты и их статусы.
+            А так же передавать информацию о взятии объекта на контроль.
+        </wsdl:documentation>
+        
+        <wsdl:operation name="GetObjects">
+            <wsdl:documentation>
+                Возвращает список и дату последнего обновления информации о всех объектах доступных пользователю. 
+                Либо подробную информацию по конкретному/указанному объекту.
+            </wsdl:documentation>
+            
+            <wsdl:input message="tns:GetObjectsIn"/>
+            <wsdl:output message="tns:GetObjectsOut"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="GetCurrentState">
+            <wsdl:documentation>
+                Возвращает текущее состояние всех объектов доступных пользователю.
+                Либо текущее состояние всех датчиков на конкретном/указанном объекте. 
+            </wsdl:documentation>
+            
+            <wsdl:input message="tns:GetCurrentStateIn"/>
+            <wsdl:output message="tns:GetCurrentStateOut"/>
+        </wsdl:operation>
+        
+        <wsdl:operation name="SendAck">
+            <wsdl:documentation>
+                Отправляет сигнал о 'взятии на контроль' объекта.
+            </wsdl:documentation>
+            
+            <wsdl:input message="tns:SendAckIn"/>
+            <wsdl:output message="tns:SendAckOut"/>
+        </wsdl:operation>  
+        
+        <wsdl:operation name="GetAckHistory">
+            <wsdl:documentation>
+                Возвращает историю по сигналам 'взятие на контроль' по объектам.
+            </wsdl:documentation>
+            
+            <wsdl:input message="tns:GetAckHistoryIn"/>
+            <wsdl:output message="tns:GetAckHistoryOut"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    
+    <wsdl:binding name="SpiB" type="tns:SpiPT">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        
+        <wsdl:operation name="GetObjects">
+            <soap:operation soapAction="urn:GetObjects"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        
+        <wsdl:operation name="GetCurrentState">
+            <soap:operation soapAction="urn:GetCurrentState"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        
+        <wsdl:operation name="SendAck">
+            <soap:operation soapAction="urn:SendAck"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        
+        <wsdl:operation name="GetAckHistory">
+            <soap:operation soapAction="urn:GetAckHistory"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    
+    <wsdl:service name="SPI">
+        <wsdl:documentation>Обеспечивает обмен данными между ППО и АРМ</wsdl:documentation>
+        <wsdl:port name="Spi" binding="tns:SpiB">
+            <soap:address location="http://spi.mchs.ru"/>
+        </wsdl:port>
+    </wsdl:service>   
+    
+</wsdl:definitions>
